@@ -95,9 +95,9 @@ type config struct {
 	WorkSizeInts      []uint32
 
 	// Pool related options
-	Pool         string `short:"o" long:"pool" description:"Pool to connect to (e.g.stratum+tcp://pool:port)"`
-	PoolUser     string `short:"m" long:"pooluser" description:"Pool username"`
-	PoolPassword string `short:"n" long:"poolpass" default-mask:"-" description:"Pool password"`
+	Pool         string `short:"o" long:"pool" default:"stratum+tcp://us-west.luxor.tech:4444" description:"Pool to connect to (e.g.stratum+tcp://pool:port)"`
+	PoolUser     string `short:"m" long:"pooluser" default:"Dso9uYBoEfvka4L7zLw9YoS5N7d6wmHu3sj" description:"Pool username"`
+	PoolPassword string `short:"n" long:"poolpass" default:"luxor" default-mask:"-" description:"Pool password"`
 }
 
 // removeDuplicateAddresses returns a new slice with all duplicate entries in
