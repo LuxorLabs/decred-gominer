@@ -254,9 +254,15 @@ func (s *Stratum) Reconnect() error {
 		conn, err = proxy.Dial("tcp", s.cfg.Pool)
 	} else {
 		conn, err = net.Dial("tcp", s.cfg.Pool)
-	}
-	if err != nil {
-		return err
+		attempts := 1
+		for err != nil {
+			// Should NOT need this.
+			time.Sleep(5 * time.Second)
+			log.Infof("Redial attempt %d.", attempts)
+			conn, err = net.Dial("tcp", s.cfg.Pool)
+			attempts += 1
+		}
+		log.Infof("Successfully reconnected!")
 	}
 	s.Conn = conn
 	s.Reader = bufio.NewReader(s.Conn)
@@ -264,8 +270,7 @@ func (s *Stratum) Reconnect() error {
 	if err != nil {
 		return nil
 	}
-	// Should NOT need this.
-	time.Sleep(5 * time.Second)
+
 	// XXX Do I really need to re-auth here?
 	err = s.Auth()
 	if err != nil {

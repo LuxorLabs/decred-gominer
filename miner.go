@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -65,8 +66,10 @@ func (m *Miner) workSubmitThread() {
 	for {
 		select {
 		case <-m.quit:
+			log.Println("quitting")
 			return
 		case data := <-m.workDone:
+			log.Println("work done")
 			// Only use that is we are not using a pool.
 			if m.pool == nil {
 				accepted, err := GetWorkSubmit(data)
