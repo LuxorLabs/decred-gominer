@@ -14,9 +14,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/btcsuite/btclog"
-	"github.com/btcsuite/go-flags"
+	"github.com/jessevdk/go-flags"
+	"github.com/decred/dcrd/chaincfg"
 	"github.com/decred/dcrd/dcrutil"
+	"github.com/decred/slog"
 )
 
 const (
@@ -146,7 +147,7 @@ func fileExists(name string) bool {
 
 // validLogLevel returns whether or not logLevel is a valid debug log level.
 func validLogLevel(logLevel string) bool {
-	_, ok := btclog.LevelFromString(logLevel)
+	_, ok := slog.LevelFromString(logLevel)
 	return ok
 }
 
@@ -582,8 +583,10 @@ func loadConfig() (*config, []string, error) {
 	switch {
 	case cfg.TestNet:
 		defaultRPCPort = defaultRPCPortTestNet
+		chainParams = &chaincfg.TestNet3Params
 	case cfg.SimNet:
 		defaultRPCPort = defaultRPCPortSimNet
+		chainParams = &chaincfg.SimNetParams
 	default:
 		defaultRPCPort = defaultRPCPortMainNet
 	}
